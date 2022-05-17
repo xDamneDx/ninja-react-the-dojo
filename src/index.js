@@ -6,9 +6,10 @@ import { AuthContextProvider } from "./context/AuthContext";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <React.StrictMode>
-    <AuthContextProvider>
-      <App />
-    </AuthContextProvider>
-  </React.StrictMode>
+  // React Router v5 doesn't work with React 18 StrictMode.
+  // <React.StrictMode>
+  <AuthContextProvider>
+    <App />
+  </AuthContextProvider>
+  // </React.StrictMode>
 );
