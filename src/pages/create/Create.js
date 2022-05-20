@@ -1,20 +1,47 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import Select from "react-select";
+import { useCollection } from "../../hooks/useCollection";
 
 // Styles:
 import "./Create.css";
 
+const categories = [
+  { value: "development", label: "Development" },
+  { value: "design", label: "Design" },
+  { value: "sales", label: "Sales" },
+  { value: "marketing", label: "Marketing" },
+];
+
 export default function Create() {
-  // From fields values:
+  const { documents } = useCollection("users");
+  const [users, setUsers] = useState([]);
+
+  // Form fields values:
   const [name, setName] = useState("");
   const [details, setDetails] = useState("");
   const [dueDate, setDueDate] = useState("");
-  //   const [category, setCategory] = useState("");
-  //   const [assignedUsers, setAssignedUsers] = useState([]);
+  const [category, setCategory] = useState("");
+  const [assignedUsers, setAssignedUsers] = useState([]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log({ name, details, dueDate });
+    console.log({
+      name,
+      details,
+      dueDate,
+      category: category.value,
+      assignedUsers,
+    });
   };
+
+  useEffect(() => {
+    if (documents) {
+      const options = documents.map((user) => {
+        return { value: user, label: user.displayName };
+      });
+      setUsers(options);
+    }
+  }, [documents]);
 
   return (
     <div className="create-form">
@@ -50,11 +77,18 @@ export default function Create() {
 
         <label>
           <span>Project Category:</span>
-          {/* category select there */}
+          <Select
+            options={categories}
+            onChange={(option) => setCategory(option)}
+          />
         </label>
         <label>
           <span>Assign to:</span>
-          {/* assignee select there */}
+          <Select
+            options={users}
+            onChange={(option) => setAssignedUsers(option)}
+            isMulti
+          />
         </label>
 
         <button className="btn">Add Project</button>
